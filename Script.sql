@@ -46,6 +46,40 @@ create table utilisateur (
 	noTypeUtilisateur	int not null constraint fk_noTypeUtilisateur foreign key references typeUtilisateur (noTypeUtilisateur)
 )
 
+--Table typeSoin
+create table typeSoins(
+noTypeSoin int constraint pk_noTypeSoin primary key,
+descriptionTypeSoin varchar(10)
+
+)
+
+--Table Soin
+create table Soin(
+noSoin int constraint pk_noSoin primary key,
+descriptionSoin varchar(50) ,
+prixSoin numeric(10,2) ,
+dureeSoin int not null,
+noTypeSoin int constraint fk_noTypeSoin foreign key  references typeSoins(noTypeSoin)
+)
+
+--Table assistantSoin
+create table assistantSoin(
+noAssistant int constraint fk_noAssistant foreign key references assisant(noAssistant),
+noSoin int constraint fk_noSoin foreign key references soin (noSoin) ,
+constraint pk_noAssistantEtSoin primary key (noAssistant,noSoin)
+)
+
+--table plannificationSoin
+create table plannificationSoin(
+noPlanification int constraint pk_noPlanification primary key  ,
+noPersonne int not null,
+
+noAssistant int constraint fk_noAssistant foreign key references assistant (noAssistant) ,
+noSoin int constraint fk_planifSoin_Soin foreign key  references Soin (noSoin), 
+dateReservation datetime not null,
+heureReservation time not null)
+
+
 -- ========== INSERTION DES DONNÉES ==========
 
 -- Insertion des clients
@@ -71,4 +105,24 @@ insert into utilisateur values
 (1002, 'GabrielleP', 'Password2', 2),	-- Préposé
 (1003, 'RominaA', 'Password3', 1),		-- Admin
 (1004, 'AhashP', 'Password4', 2)		-- Préposé
+
+
+--Insertion des type de soin
+insert into typeSoins values (1, 'Beaute')
+insert into typeSoins values (2, 'Soin')
+
+
+--Insertion des soins
+insert into Soin values(1,'Rendre les gens beau', 100,90+ ' min',1)
+insert into Soin values(2, 'Prendre soin de leur peau',150, 120 + ' min',2)
+
+--Insertion des assistantSoin
+insert into assistantSoin values(1,1)
+insert into assistantSoin values(2,2)
+
+--Insertion des plannification de soin
+insert into plannificationSoin values(1,1,1,1,'2026-09-10', '14:30:00:00')
+insert into plannificationSoin values(2,2,2,2,'2026-09-5', '12:30:00:00')
+
+
 
